@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
+    "dotenv": "^17.4.2"
+  }
+}

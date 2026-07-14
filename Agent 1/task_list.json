@@ -1,0 +1,56 @@
+[
+  {
+    "source_email_id": "eml_001",
+    "category": "action_required",
+    "priority": "high",
+    "suggested_task": "Send Q3 metrics section to Sarah by end of day Thursday"
+  },
+  {
+    "source_email_id": "eml_002",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null
+  },
+  {
+    "source_email_id": "eml_003",
+    "category": "fyi",
+    "priority": "low",
+    "suggested_task": null
+  },
+  {
+    "source_email_id": "eml_004",
+    "category": "meeting",
+    "priority": "medium",
+    "suggested_task": "Accept meeting invite for Capstone check-in on Tuesday at 3:00 PM"
+  },
+  {
+    "source_email_id": "eml_005",
+    "category": "personal",
+    "priority": "low",
+    "suggested_task": "Respond about Saturday football availability"
+  },
+  {
+    "source_email_id": "eml_006",
+    "category": "action_required",
+    "priority": "low",
+    "suggested_task": "Review onboarding doc setup section and provide feedback to Daniel"
+  },
+  {
+    "source_email_id": "eml_007",
+    "category": "action_required",
+    "priority": "high",
+    "suggested_task": "Update payment card details for KVM 2 VPS before July 28th"
+  },
+  {
+    "source_email_id": "eml_008",
+    "category": "action_required",
+    "priority": "high",
+    "suggested_task": "Investigate and restore devmair.com server - connection timeout error"
+  },
+  {
+    "source_email_id": "eml_009",
+    "category": "action_required",
+    "priority": "high",
+    "suggested_task": "Draft config change for token-bucket API rate limits and open PR by Wednesday"
+  }
+]

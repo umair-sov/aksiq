@@ -1,0 +1,92 @@
+[
+    {
+      "id": "eml_001",
+      "from": { "name": "Sarah Chen", "email": "sarah.chen@company.com" },
+      "to": ["umair@company.com"],
+      "cc": [],
+      "subject": "Q3 report — need your section by Thursday",
+      "body": "Hi Umair, can you send me your part of the Q3 report by end of day Thursday? I need it merged before the Friday leadership review. Just your metrics section, nothing else. Thanks!",
+      "timestamp": "2026-07-14T09:14:00Z",
+      "labels": ["inbox"]
+    },
+    {
+      "id": "eml_002",
+      "from": { "name": "DevTools Weekly", "email": "hello@devtoolsweekly.io" },
+      "to": ["umair@company.com"],
+      "cc": [],
+      "subject": "🔥 10 VS Code extensions you're sleeping on",
+      "body": "This week's roundup is here! Our editors picked the 10 extensions that quietly changed how they code. Plus: a deep dive on terminal multiplexers and a reader poll on your favorite theme. Read online or unsubscribe anytime at the link below.",
+      "timestamp": "2026-07-14T06:00:00Z",
+      "labels": ["inbox", "promotions"]
+    },
+    {
+      "id": "eml_003",
+      "from": { "name": "Ahmed Ali", "email": "ahmed.ali@company.com" },
+      "to": ["team-eng@company.com"],
+      "cc": ["umair@company.com"],
+      "subject": "FYI: staging deploy complete",
+      "body": "Heads up team — staging is now on build 481 with the latest changes from main. No action needed from anyone, just letting you know in case you're testing there this afternoon.",
+      "timestamp": "2026-07-14T08:40:00Z",
+      "labels": ["inbox"]
+    },
+    {
+      "id": "eml_004",
+      "from": { "name": "Priya Nair", "email": "priya.nair@company.com" },
+      "to": ["umair@company.com"],
+      "cc": [],
+      "subject": "Invite: Capstone check-in — Tue 3:00 PM",
+      "body": "Hi Umair, I've set up a 30-minute check-in for your capstone progress on Tuesday at 3:00 PM in Meeting Room 2. Please accept if that works, or suggest another slot if you're tied up. Agenda: agent design walkthrough.",
+      "timestamp": "2026-07-13T16:05:00Z",
+      "labels": ["inbox"]
+    },
+    {
+      "id": "eml_005",
+      "from": { "name": "Bilal", "email": "bilal.k@gmail.com" },
+      "to": ["umair@company.com"],
+      "cc": [],
+      "subject": "football saturday?",
+      "body": "yo are you free saturday morning? the usual pitch is booked 10am, few of the guys are coming. let me know if you're in so i can confirm numbers",
+      "timestamp": "2026-07-13T20:22:00Z",
+      "labels": ["inbox"]
+    },
+    {
+      "id": "eml_006",
+      "from": { "name": "Daniel Osei", "email": "daniel.osei@company.com" },
+      "to": ["umair@company.com"],
+      "cc": [],
+      "subject": "thoughts on the onboarding doc?",
+      "body": "Hey, when you get a chance, would love your thoughts on the onboarding doc I shared last week. No rush at all — just curious whether the setup section makes sense to a fresh pair of eyes. Cheers.",
+      "timestamp": "2026-07-11T14:30:00Z",
+      "labels": ["inbox"]
+    },
+    {
+      "id": "eml_007",
+      "from": { "name": "Hostinger", "email": "billing@hostinger.com" },
+      "to": ["umair@company.com"],
+      "cc": [],
+      "subject": "Your July newsletter + a note about your plan",
+      "body": "Welcome to the July edition! Inside: new data-center regions, a guide to caching, and customer spotlights. One quick note tucked in here — the card on file for your KVM 2 VPS expires this month, so update your payment details before the 28th to avoid any interruption to your service. Happy hosting!",
+      "timestamp": "2026-07-12T07:45:00Z",
+      "labels": ["inbox", "promotions"]
+    },
+    {
+      "id": "eml_008",
+      "from": { "name": "UptimeRobot", "email": "alerts@uptimerobot.com" },
+      "to": ["umair@company.com"],
+      "cc": [],
+      "subject": "🔴 Monitor DOWN: devmair.com",
+      "body": "Your monitor devmair.com (HTTPS) is currently DOWN. It stopped responding at 2026-07-14 05:12 UTC with error: Connection Timeout. We'll notify you when it's back up. This is an automated alert.",
+      "timestamp": "2026-07-14T05:12:00Z",
+      "labels": ["inbox"]
+    },
+    {
+      "id": "eml_009",
+      "from": { "name": "Fatima Riaz", "email": "fatima.riaz@company.com" },
+      "to": ["umair@company.com"],
+      "cc": ["team-eng@company.com"],
+      "subject": "Re: Re: Re: API rate limits discussion",
+      "body": "Thanks all for the back-and-forth on this. Agreed the current ceiling is too low. To wrap up: I think we go with the token-bucket approach Ahmed sketched. Umair, can you draft the config change and open a PR by Wednesday so we can review before the sprint closes? Everything else in the thread we can park for now.",
+      "timestamp": "2026-07-13T11:50:00Z",
+      "labels": ["inbox"]
+    }
+  ]

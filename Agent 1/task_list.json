@@ -1,56 +1,82 @@
 [
   {
-    "source_email_id": "eml_001",
-    "category": "action_required",
-    "priority": "high",
-    "suggested_task": "Send Q3 metrics section to Sarah by end of day Thursday"
-  },
-  {
-    "source_email_id": "eml_002",
+    "source_email_id": "19f9886a50059b6c",
     "category": "newsletter",
     "priority": "low",
-    "suggested_task": null
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
   },
   {
-    "source_email_id": "eml_003",
+    "source_email_id": "19f9881d021233bf",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f987ae43246c90",
     "category": "fyi",
     "priority": "low",
-    "suggested_task": null
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
   },
   {
-    "source_email_id": "eml_004",
-    "category": "meeting",
-    "priority": "medium",
-    "suggested_task": "Accept meeting invite for Capstone check-in on Tuesday at 3:00 PM"
-  },
-  {
-    "source_email_id": "eml_005",
-    "category": "personal",
+    "source_email_id": "19f98146c78de0a1",
+    "category": "newsletter",
     "priority": "low",
-    "suggested_task": "Respond about Saturday football availability"
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
   },
   {
-    "source_email_id": "eml_006",
-    "category": "action_required",
+    "source_email_id": "19f97be555cf4a44",
+    "category": "newsletter",
     "priority": "low",
-    "suggested_task": "Review onboarding doc setup section and provide feedback to Daniel"
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
   },
   {
-    "source_email_id": "eml_007",
-    "category": "action_required",
-    "priority": "high",
-    "suggested_task": "Update payment card details for KVM 2 VPS before July 28th"
+    "source_email_id": "19f97b3ad8dad306",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
   },
   {
-    "source_email_id": "eml_008",
-    "category": "action_required",
-    "priority": "high",
-    "suggested_task": "Investigate and restore devmair.com server - connection timeout error"
+    "source_email_id": "19f97a5a1f108031",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
   },
   {
-    "source_email_id": "eml_009",
-    "category": "action_required",
-    "priority": "high",
-    "suggested_task": "Draft config change for token-bucket API rate limits and open PR by Wednesday"
+    "source_email_id": "19f976e2b69ef3cf",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f975742d234cda",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f96d79a5dcf16e",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": "2026-08-04T23:59:59",
+    "truncated": false
   }
 ]

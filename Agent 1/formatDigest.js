@@ -47,10 +47,12 @@ function formatDeadlineDate(isoString) {
  * Inputs: taskList (Array<Object>) — entries from task_list.json (category,
  * priority, suggested_task, event_datetime, source_email_id); emailsById
  * (Object) — id-keyed email lookup from `loadEmailsById`.
- * Output: { deadlines: Array<Object>, high: Array<string>, medium:
- * Array<string>, low: Array<string> } — tasks bucketed for digest display.
- * `deadlines` entries are the original task object plus a computed `label`;
- * the other buckets are plain display strings.
+ * Output: { deadlines: Array<Object>, high: Array<{label: string, taskAdded:
+ * boolean}>, medium: Array<{label: string, taskAdded: boolean}>, low:
+ * Array<string> } — tasks bucketed for digest display. `deadlines` entries
+ * are the original task object plus a computed `label`; `high`/`medium`
+ * entries are now `{ label, taskAdded }` objects (see below); `low` stays a
+ * plain array of display strings.
  * What it does: sorts every classified task into exactly one digest section —
  * upcoming deadlines/meetings, or by priority otherwise.
  * How it does it: any task with an event_datetime is treated as a deadline
@@ -58,7 +60,13 @@ function formatDeadlineDate(isoString) {
  * show; everything else falls through to high/medium/low priority buckets.
  * The display label prefers "sender – suggested task" when the source email
  * is still in the cache, falling back to the task's own fields if the email
- * was pruned from emails.json since triage ran.
+ * was pruned from emails.json since triage ran. For high/medium items,
+ * `taskAdded` is `Boolean(task.suggested_task)` — this deliberately mirrors
+ * the `else if (task.suggested_task)` check syncToGoogle.js uses to decide
+ * whether it actually created a Google Task for that item (syncToGoogle.js
+ * only creates a task when `suggested_task` is truthy), so the digest's
+ * "Added to Task" confirmation reflects what really happened during sync
+ * rather than guessing independently.
  */
 function buildSections(taskList, emailsById) {
   const deadlines = [], high = [], medium = [], low = [];
@@ -73,8 +81,9 @@ function buildSections(taskList, emailsById) {
       deadlines.push({ ...task, label });
       continue;
     }
-    if (task.priority === 'high') high.push(label);
-    else if (task.priority === 'medium') medium.push(label);
+    const taskAdded = Boolean(task.suggested_task);
+    if (task.priority === 'high') high.push({ label, taskAdded });
+    else if (task.priority === 'medium') medium.push({ label, taskAdded });
     else low.push(email ? (email.from.name || email.from.email) : task.source_email_id);
   }
   return { deadlines, high, medium, low };
@@ -134,12 +143,17 @@ export async function buildDigestMessage() {
   }
   if (high.length) {
     message += `🟠 HIGH\n`;
-    for (const h of high) message += `• ${h}\n`;
+    // Mirrors the deadlines section's "– ✅ Added to Calendar" suffix above:
+    // append "– ✅ Added to Task" whenever syncToGoogle.js would actually have
+    // created a Google Task for this item (h.taskAdded), so the confirmation
+    // shown here matches what really happened during sync.
+    for (const h of high) message += `• ${h.label}${h.taskAdded ? ' – ✅ Added to Task' : ''}\n`;
     message += `\n`;
   }
   if (medium.length) {
     message += `🟡 MEDIUM\n`;
-    for (const m of medium) message += `• ${m}\n`;
+    // Same pattern as the HIGH section above.
+    for (const m of medium) message += `• ${m.label}${m.taskAdded ? ' – ✅ Added to Task' : ''}\n`;
     message += `\n`;
   }
   if (low.length) {

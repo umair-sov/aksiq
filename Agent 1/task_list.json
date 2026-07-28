@@ -1,6 +1,38 @@
 [
   {
-    "source_email_id": "19f9886a50059b6c",
+    "source_email_id": "19f7015204df0b97",
+    "category": "action_required",
+    "priority": "high",
+    "suggested_task": "Update payment information for iCloud+ subscription to avoid downgrade",
+    "event_datetime": "2026-07-18T12:24:45",
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6b6216873bbb8",
+    "category": "action_required",
+    "priority": "high",
+    "suggested_task": "Top up Trust Bank account - transaction declined",
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6afd949de0496",
+    "category": "action_required",
+    "priority": "high",
+    "suggested_task": "Update Apple payment information for beIN SPORTS subscription",
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f699bdd407e954",
+    "category": "action_required",
+    "priority": "high",
+    "suggested_task": "RSVP for Apple phone screening interview (Jul 20-24, 2026)",
+    "event_datetime": "2026-07-20T00:00:00",
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f709951c3d017a",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -8,7 +40,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f9881d021233bf",
+    "source_email_id": "19f7023de735ce21",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -16,7 +48,47 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f987ae43246c90",
+    "source_email_id": "19f6fe8a60468f1d",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6fbca03f79835",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6fb5d82a42aad",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6f902cebc6357",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6f5deffdb427a",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6f4b6e1cc109d",
     "category": "fyi",
     "priority": "low",
     "suggested_task": null,
@@ -24,7 +96,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f98146c78de0a1",
+    "source_email_id": "19f6f19bcc801a79",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -32,7 +104,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f97be555cf4a44",
+    "source_email_id": "19f6eee3bee28bd3",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -40,7 +112,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f97b3ad8dad306",
+    "source_email_id": "19f6eda36348b3af",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -48,7 +120,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f97a5a1f108031",
+    "source_email_id": "19f6e813be420c4c",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -56,7 +128,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f976e2b69ef3cf",
+    "source_email_id": "19f6e740cc0afdc2",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -64,7 +136,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f975742d234cda",
+    "source_email_id": "19f6e72d5e6d2c0d",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -72,11 +144,259 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f96d79a5dcf16e",
+    "source_email_id": "19f6e5d15192cb8e",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
-    "event_datetime": "2026-08-04T23:59:59",
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6e3b8e8c29997",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6e2b16bbb4ad0",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6d60e82cc4f4c",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6d01980d3a605",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6cf40db87a520",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6c1be5857ad38",
+    "category": "fyi",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6c0ed768641ea",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6bd9166502562",
+    "category": "fyi",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6ba89cebf4ce0",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6b6b515ce7838",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6b572a4326860",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6ad7a32fe0b7d",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6abcfb6f251b9",
+    "category": "fyi",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6a962cc8597b4",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6a9357238f151",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6a8f7fa4ee356",
+    "category": "fyi",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6a73ec9ef5d65",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6a5ed4b065650",
+    "category": "meeting",
+    "priority": "low",
+    "suggested_task": "Register for SFES scholarship webinar on August 13th",
+    "event_datetime": "2026-08-13T18:30:00",
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f69f35b46c2c07",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f699eb49c5c172",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f69966b696b11d",
+    "category": "fyi",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f69882d9dc5fe5",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6988153c61223",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": "2026-07-22T21:00:00",
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f695aa841cf2fd",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f694d78bac27d2",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f694c97ba7f52f",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6931fa2922cae",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6915539937cb1",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f6903639bbe6cf",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f68a8ef8122468",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f689863317deb7",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": null,
     "truncated": false
   }
 ]

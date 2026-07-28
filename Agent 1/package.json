@@ -1,11 +1,14 @@
 {
   "type": "module",
   "scripts": {
-    "triage": "node fetchEmails.js && node emailPriority.js && node syncToGoogle.js"
+    "triage": "node fetchEmails.js && node emailPriority.js && node syncToGoogle.js && node applyLabels.js && node postDigest.js",
+    "preview-digest": "node previewDigest.js",
+    "bot": "node discordBot.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
     "@google-cloud/local-auth": "^3.0.1",
+    "discord.js": "^14.27.0",
     "dotenv": "^17.4.2",
     "googleapis": "^173.0.0",
     "html-to-text": "^10.0.0"

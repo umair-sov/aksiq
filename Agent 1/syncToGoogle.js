@@ -68,8 +68,11 @@ async function createCalendarEvent(auth, task) {
     method: 'POST',
     data: {
       summary: task.suggested_task || task.category,
-      start: { dateTime: start.toISOString() },
-      end: { dateTime: end.toISOString() },
+      // Explicit timeZone so the event lands at the intended local time
+      // regardless of the executing machine's local timezone, instead of
+      // relying on the implicit UTC offset baked into a bare toISOString().
+      start: { dateTime: start.toISOString(), timeZone: 'Asia/Karachi' },
+      end: { dateTime: end.toISOString(), timeZone: 'Asia/Karachi' },
     },
   });
 }
@@ -105,13 +108,16 @@ async function createTask(auth, task) {
  * How it does it: meeting-category tasks with a known event_datetime become
  * calendar events; anything else with a suggested_task becomes a Google Task;
  * everything else (e.g. fyi/newsletter with no suggested action) is skipped.
- * Each processed task's id is appended to `syncedIds` (regardless of which
- * branch it took) so it's excluded on the next run, and the full list is
- * saved once at the end.
+ * Each task is synced inside a try/catch: on success its id is appended to
+ * `syncedIds` and `synced_ids.json` is saved immediately (not batched), so a
+ * later task throwing (transient API error, quota, etc.) can't strand
+ * already-created events/tasks as "not synced" and cause them to be
+ * duplicated on the next run. A failed task is logged and skipped, and the
+ * loop continues with the next task.
  */
 async function syncTasks() {
   const auth = await getAuthorizedClient();
-  const taskList = JSON.parse(fs.readFileSync('task_list.json', 'utf-8'));
+  const taskList = fs.existsSync('task_list.json') ? JSON.parse(fs.readFileSync('task_list.json', 'utf-8')) : [];
   const syncedIds = loadSyncedIds();
 
   for (const task of taskList) {
@@ -120,20 +126,29 @@ async function syncTasks() {
       continue;
     }
 
-    if (task.category === 'meeting' && task.event_datetime) {
-      await createCalendarEvent(auth, task);
-      console.log(`Created calendar event: ${task.source_email_id}`);
-    } else if (task.suggested_task) {
-      await createTask(auth, task);
-      console.log(`Created task: ${task.source_email_id}`);
-    } else {
-      console.log(`No action needed, skipping: ${task.source_email_id}`);
+    try {
+      if (task.category === 'meeting' && task.event_datetime) {
+        await createCalendarEvent(auth, task);
+        console.log(`Created calendar event: ${task.source_email_id}`);
+      } else if (task.suggested_task) {
+        await createTask(auth, task);
+        console.log(`Created task: ${task.source_email_id}`);
+      } else {
+        console.log(`No action needed, skipping: ${task.source_email_id}`);
+      }
+
+      // Persist immediately after each successful sync, not once at the end —
+      // otherwise a later task's failure would crash the run before this
+      // save ever happens, and this already-created event/task would be
+      // re-created as a duplicate on the next run.
+      syncedIds.push(task.source_email_id);
+      saveSyncedIds(syncedIds);
+    } catch (err) {
+      // Log and move on to the next task instead of letting one failure
+      // abort the whole run and strand every task after it as "not synced".
+      console.error(`Failed to sync ${task.source_email_id}:`, err.message);
     }
-
-    syncedIds.push(task.source_email_id);
   }
-
-  saveSyncedIds(syncedIds);
 }
 
 await syncTasks();

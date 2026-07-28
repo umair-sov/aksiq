@@ -45,8 +45,11 @@ async function listLabels() {
     keyfilePath: CREDENTIALS_PATH,
   });
 
-  console.log('--- Raw credentials on the auth client ---');
-  console.log(auth.credentials);
+  // Deliberately not printing auth.credentials here — it contains a live
+  // OAuth access token (and refresh token, if offline access was granted),
+  // and logging it risks that credential ending up captured in shell
+  // history, terminal scrollback, or a log file.
+  console.log('--- Raw credentials on the auth client (redacted) ---');
 
   console.log('--- Attempt 1: direct request via the auth client itself ---');
   try {

@@ -69,7 +69,7 @@ async function getOrCreateLabelId(auth, labelName, existingLabels) {
  */
 async function applyLabels() {
   const auth = await getAuthorizedClient();
-  const taskList = JSON.parse(fs.readFileSync('task_list.json', 'utf-8'));
+  const taskList = fs.existsSync('task_list.json') ? JSON.parse(fs.readFileSync('task_list.json', 'utf-8')) : [];
 
   const labelsResult = await auth.request({ url: 'https://gmail.googleapis.com/gmail/v1/users/me/labels' });
   const existingLabels = labelsResult.data.labels;

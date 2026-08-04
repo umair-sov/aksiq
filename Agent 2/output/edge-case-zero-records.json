@@ -1,0 +1,19 @@
+{
+  "period": "no data",
+  "sections": [],
+  "merged_events": [],
+  "skipped": [
+    {
+      "source": "sales",
+      "reason": "empty"
+    },
+    {
+      "source": "ops",
+      "reason": "empty"
+    },
+    {
+      "source": "support",
+      "reason": "empty"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "SAL-001",
+    "date": "2026-07-20",
+    "account": "Acme Corp",
+    "summary": "Acme Corp renewed their annual contract for another 12 months after a positive QBR."
+  },
+  {
+    "id": "SAL-002",
+    "date": "2026-07-21",
+    "account": "Globex Inc",
+    "summary": "Globex Inc expressed frustration about the payment processing outage earlier this week; deal renewal is now at risk."
+  },
+  {
+    "id": "SAL-003",
+    "date": "2026-07-21",
+    "account": "Wayne Enterprises",
+    "summary": "Wayne Enterprises reported the product felt sluggish during their live demo call."
+  },
+  {
+    "id": "SAL-004",
+    "date": "2026-07-22",
+    "account": "Stark Industries",
+    "summary": "Discussed a potential upsell to the enterprise tier with Stark Industries; they're evaluating budget for next quarter."
+  },
+  {
+    "id": "SAL-005",
+    "date": "2026-07-22",
+    "account": "Umbrella Ltd",
+    "summary": "Umbrella Ltd deal has closed \u2014 contract signed and countersigned as of Thursday."
+  },
+  {
+    "id": "SAL-006",
+    "date": "2026-07-22",
+    "account": "Initech",
+    "summary": "Scheduled an onboarding kickoff call with Initech for next Monday."
+  },
+  {
+    "id": "SAL-007",
+    "date": "2026-07-23",
+    "account": "Hooli",
+    "summary": "Hooli signed a new multi-year deal worth $240k ARR."
+  },
+  {
+    "id": "SAL-008",
+    "date": "2026-07-23",
+    "account": "Soylent Corp",
+    "summary": "Soylent Corp requested a custom pricing proposal ahead of their APAC expansion."
+  },
+  {
+    "id": "SAL-009",
+    "date": "2026-07-24",
+    "account": "Vandelay Industries",
+    "summary": "Vandelay Industries pushed their renewal decision to next quarter, citing a budget freeze."
+  },
+  {
+    "id": "SAL-010",
+    "date": "2026-07-24",
+    "account": null,
+    "summary": "General note: pipeline coverage for Q3 is tracking about 15% below target across the team."
+  }
+]

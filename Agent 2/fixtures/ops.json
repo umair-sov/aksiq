@@ -1,0 +1,59 @@
+{
+  "week": "2026-07-20",
+  "entries": [
+    {
+      "ticket_id": "OPS-1040",
+      "reported_on": "2026-07-21T09:15:00Z",
+      "system": "Payments Gateway",
+      "customer": "Globex Inc",
+      "description": "Payment processing outage affecting multiple enterprise accounts; root cause traced to a failed certificate rotation. Resolved after ~4 hours."
+    },
+    {
+      "ticket_id": "OPS-1041",
+      "reported_on": "2026-07-21T14:40:00Z",
+      "system": "API Gateway",
+      "customer": null,
+      "description": "Investigated elevated latency and slow response times reported by several accounts; root cause found to be a cache misconfiguration, fix deployed same day."
+    },
+    {
+      "ticket_id": "OPS-1042",
+      "reported_on": "2026-07-22T11:00:00Z",
+      "system": "Legal/Contracts DB",
+      "customer": "Umbrella Ltd",
+      "description": "Umbrella Ltd contract is still pending legal review; redlines were sent back to their counsel and have not yet been returned."
+    },
+    {
+      "ticket_id": "OPS-1043",
+      "reported_on": "2026-07-22T16:20:00Z",
+      "system": "Internal Build System"
+    },
+    {
+      "ticket_id": "OPS-1044",
+      "reported_on": "2026-07-22T17:05:00Z",
+      "system": "Internal Wiki",
+      "customer": null,
+      "description": "Migrated internal documentation to the new wiki platform; no customer impact."
+    },
+    {
+      "ticket_id": "OPS-1045",
+      "reported_on": "2026-07-23T08:30:00Z",
+      "system": "Auth Service",
+      "customer": null,
+      "description": "Rotated expiring SSL certificates across three internal services ahead of schedule."
+    },
+    {
+      "ticket_id": "OPS-1046",
+      "reported_on": "2026-07-23T22:10:00Z",
+      "system": "Backup Pipeline",
+      "customer": null,
+      "description": "Nightly backup job failed twice this week due to a storage quota issue; quota increased and job re-run successfully both times."
+    },
+    {
+      "ticket_id": "OPS-1047",
+      "reported_on": "2026-07-24T10:00:00Z",
+      "system": "Monitoring",
+      "customer": null,
+      "description": "Added new alerting rules for database connection pool exhaustion."
+    }
+  ]
+}

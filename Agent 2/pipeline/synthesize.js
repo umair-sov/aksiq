@@ -28,9 +28,11 @@
 
 require("../config/env");
 
-const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL =
-  process.env.OPENROUTER_MODEL || "nvidia/nemotron-3-ultra-550b-a55b:free";
+// Shared OpenRouter request/retry/response-extraction boilerplate —
+// see openRouterClient.js. Also the single source of truth for the
+// MODEL default fallback now, so dedup.js and synthesize.js can't
+// drift out of sync on it again.
+const { callOpenRouter } = require("./openRouterClient");
 
 const SYSTEM_PROMPT = `You are writing a weekly status summary from clusters of records. Each cluster contains 2+ records from different sources describing the SAME real-world event.
 
@@ -77,38 +79,15 @@ async function synthesizeClusterHighlights(clusters) {
     })),
   }));
 
-  const response = await fetch(OPENROUTER_API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      max_tokens: 8000, // same reasoning-model headroom as dedup.js
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: JSON.stringify(compactClusters, null, 2) },
-      ],
-    }),
-  });
-
-  if (!response.ok) {
-    const errBody = await response.text();
-    throw new Error(`OpenRouter API error ${response.status}: ${errBody}`);
-  }
-
-  const data = await response.json();
-  const rawText = data.choices?.[0]?.message?.content ?? "";
-
-  console.log("[synthesize] Raw model response:", JSON.stringify(data, null, 2));
-
-  if (!rawText || rawText.trim() === "") {
-    throw new Error(
-      "[synthesize] Model returned empty content. Full response logged above."
-    );
-  }
+  // Request-building, retry-with-backoff on transient failures (bad
+  // HTTP status, network error, unparseable HTTP response body), and
+  // extraction of the raw content string all live in the shared
+  // helper now — see openRouterClient.js.
+  const rawText = await callOpenRouter(
+    SYSTEM_PROMPT,
+    JSON.stringify(compactClusters, null, 2),
+    { logLabel: "[synthesize]" }
+  );
 
   let parsed;
   try {
@@ -119,8 +98,51 @@ async function synthesizeClusterHighlights(clusters) {
     );
   }
 
+  // --- Validate response shape BEFORE using it. Without this: if the
+  // model returns "highlights" as a STRING instead of an array, the
+  // `for (const h of parsed.highlights)` loop below would silently
+  // iterate individual characters (strings are iterable in JS) — no
+  // crash, but h.cluster_index/h.highlight are undefined every time,
+  // producing an empty/garbage highlightMap with no signal anything
+  // went wrong. Fail loudly here instead. ---
+  if (parsed.highlights !== undefined && !Array.isArray(parsed.highlights)) {
+    throw new Error(
+      `[synthesize] Model response shape invalid: expected "highlights" to be an array, got ${typeof parsed.highlights} (${JSON.stringify(parsed.highlights)}).`
+    );
+  }
+
+  const highlights = parsed.highlights ?? [];
+
+  highlights.forEach((h, i) => {
+    if (h === null || typeof h !== "object" || Array.isArray(h)) {
+      throw new Error(
+        `[synthesize] Model response shape invalid: highlights[${i}] must be an object, got ${JSON.stringify(h)}.`
+      );
+    }
+    if (typeof h.cluster_index !== "number") {
+      // Also catches the case where the model emits "cluster_index": "0"
+      // (a string) instead of 0 (a number) — without this check, that
+      // response is well-formed enough to pass a looser check but still
+      // silently misses in the Map.get(index) lookup below due to
+      // strict key equality against the real numeric index.
+      throw new Error(
+        `[synthesize] Model response shape invalid: highlights[${i}].cluster_index must be a number, got ${typeof h.cluster_index} (${JSON.stringify(h.cluster_index)}).`
+      );
+    }
+    if (typeof h.highlight !== "string") {
+      throw new Error(
+        `[synthesize] Model response shape invalid: highlights[${i}].highlight must be a string, got ${typeof h.highlight} (${JSON.stringify(h.highlight)}).`
+      );
+    }
+    if (h.highlight.trim().length === 0) {
+      throw new Error(
+        `[synthesize] Model response shape invalid: highlights[${i}].highlight for cluster_index ${h.cluster_index} must not be empty or whitespace-only, got ${JSON.stringify(h.highlight)}.`
+      );
+    }
+  });
+
   const highlightMap = new Map();
-  for (const h of parsed.highlights ?? []) {
+  for (const h of highlights) {
     highlightMap.set(h.cluster_index, h.highlight);
   }
   return highlightMap;
@@ -151,12 +173,34 @@ function computePeriod(allRecords) {
 }
 
 /**
+ * Look up cluster `index`'s synthesized highlight. If synthesis didn't
+ * produce one for this cluster (the model omitted it from an otherwise
+ * valid response, or the whole synthesize call short-circuited), fall
+ * back to dedup's raw `reasoning` text — but never silently: this
+ * fallback means synthesis quality degraded for that cluster, so it's
+ * always logged with a loud console.warn naming which cluster and why.
+ */
+function resolveHighlight(index, cluster, clusterHighlights) {
+  const highlight = clusterHighlights.get(index);
+  if (highlight === undefined) {
+    console.warn(
+      `[synthesize] No synthesized highlight for cluster ${index} — falling back to raw dedup reasoning ("${cluster.reasoning}"). This means synthesis quality degraded for this cluster even though the overall response was otherwise valid.`
+    );
+    return cluster.reasoning;
+  }
+  return highlight;
+}
+
+/**
  * Build the merged_events audit log (D2/N4 — reviewability): what
  * clustered with what, and why, in plain "source/source_id" form.
+ * Takes already-resolved highlights (see resolveHighlight above) so the
+ * fallback warning, if any, was already logged once by the caller
+ * rather than a second time here.
  */
-function buildMergedEvents(clusters, clusterHighlights) {
+function buildMergedEvents(clusters, resolvedHighlights) {
   return clusters.map((cluster, index) => ({
-    event: clusterHighlights.get(index) ?? cluster.reasoning,
+    event: resolvedHighlights[index],
     from: cluster.records.map((r) => `${r.source}/${r.source_id}`),
   }));
 }
@@ -183,6 +227,14 @@ async function synthesize({ clusters, standalone }, skipped = []) {
 
   const clusterHighlights = await synthesizeClusterHighlights(clusters);
 
+  // Resolve each cluster's highlight exactly once — this is also where
+  // the fallback-to-raw-reasoning warning (if any) gets logged, so it's
+  // logged a single time per cluster rather than once per usage site
+  // below (sections + merged_events both need the same resolved value).
+  const resolvedHighlights = clusters.map((cluster, index) =>
+    resolveHighlight(index, cluster, clusterHighlights)
+  );
+
   // group -> array of highlight strings
   const sectionsMap = {};
 
@@ -193,10 +245,11 @@ async function synthesize({ clusters, standalone }, skipped = []) {
   }
 
   // Clusters: grouped by every source they span, using the synthesized
-  // (or, on failure, the raw dedup reasoning as a fallback) highlight.
+  // (or, on failure, the raw dedup reasoning as a loudly-logged
+  // fallback) highlight.
   clusters.forEach((cluster, index) => {
     const group = groupLabelForCluster(cluster);
-    const highlight = clusterHighlights.get(index) ?? cluster.reasoning;
+    const highlight = resolvedHighlights[index];
     (sectionsMap[group] ??= []).push(highlight);
   });
 
@@ -213,7 +266,7 @@ async function synthesize({ clusters, standalone }, skipped = []) {
   return {
     period: computePeriod(allRecords),
     sections,
-    merged_events: buildMergedEvents(clusters, clusterHighlights),
+    merged_events: buildMergedEvents(clusters, resolvedHighlights),
     // Now a REAL input from merge.js's source-level detection, not a
     // hardcoded placeholder. Per-record malformed skips (OPS-1043,
     // SUP-7785) still aren't in here — those are logged by their
@@ -224,4 +277,4 @@ async function synthesize({ clusters, standalone }, skipped = []) {
   };
 }
 
-module.exports = { synthesize };
+module.exports = { synthesize, computePeriod };

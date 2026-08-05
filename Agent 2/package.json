@@ -1,0 +1,16 @@
+{
+  "name": "agent-2",
+  "version": "1.0.0",
+  "description": "A domain-agnostic agent that reads weekly updates from N independent sources (currently Sales / Ops / Support), removes cross-source duplicates, and produces one synthesized summary with an auditable merge record. Currently runs entirely locally against mock fixtures — no n8n port, no live API integrations yet.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}

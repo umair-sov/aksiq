@@ -45,12 +45,11 @@
 // project should require this first, same as here.
 require("../config/env");
 
-const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
-
-// Swap this for whatever's current on OpenRouter's model list — this is
-// a cheaper/faster tier per your "downgrade" ask, but verify the exact
-// string yourself since these get renamed/deprecated over time.
-const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-3.5-haiku";
+// Shared OpenRouter request/retry/response-extraction boilerplate —
+// see openRouterClient.js. Also the single source of truth for the
+// MODEL default fallback now, so dedup.js and synthesize.js can't
+// drift out of sync on it again.
+const { callOpenRouter } = require("./openRouterClient");
 
 const SYSTEM_PROMPT = `You are deduplicating status update records from multiple independent sources (sales, ops, support).
 
@@ -105,47 +104,15 @@ async function dedupRecords(mergedRecords) {
     text: r.text,
   }));
 
-  const response = await fetch(OPENROUTER_API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: MODEL,
-      // Bumped up from 2000: reasoning-tier models (like Nemotron 3
-      // Ultra) can spend a chunk of the token budget on internal
-      // reasoning before writing the actual answer. If max_tokens runs
-      // out mid-reasoning, `content` comes back empty even though the
-      // call itself succeeded — that's what was happening before.
-      max_tokens: 8000,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: JSON.stringify(compactRecords, null, 2) },
-      ],
-    }),
-  });
-
-  if (!response.ok) {
-    const errBody = await response.text();
-    throw new Error(`OpenRouter API error ${response.status}: ${errBody}`);
-  }
-
-  const data = await response.json();
-  const rawText = data.choices?.[0]?.message?.content ?? "";
-
-  // Debug visibility — leave this in while you're still verifying
-  // against the fixture, strip it out later once dedup is trusted.
-  console.log("[dedup] Raw model response:", JSON.stringify(data, null, 2));
-
-  if (!rawText || rawText.trim() === "") {
-    throw new Error(
-      "[dedup] Model returned empty content. Full response logged above — " +
-      "check finish_reason (e.g. 'length' means it ran out of tokens " +
-      "before writing an answer)."
-    );
-  }
+  // Request-building, retry-with-backoff on transient failures (bad
+  // HTTP status, network error, unparseable HTTP response body), and
+  // extraction of the raw content string all live in the shared
+  // helper now — see openRouterClient.js.
+  const rawText = await callOpenRouter(
+    SYSTEM_PROMPT,
+    JSON.stringify(compactRecords, null, 2),
+    { logLabel: "[dedup]" }
+  );
 
   let parsed;
   try {
@@ -156,7 +123,57 @@ async function dedupRecords(mergedRecords) {
     );
   }
 
+  // --- Validate response shape BEFORE the cluster-membership-duplicate
+  // check below, which assumes `clusters` is an array of objects each
+  // with an array `source_ids`. Without this, a malformed shape (e.g.
+  // the model returning `clusters` as an object instead of an array)
+  // throws an unlabeled native TypeError deep in this file instead of
+  // a clear pipeline error. ---
+  if (parsed.clusters !== undefined && !Array.isArray(parsed.clusters)) {
+    throw new Error(
+      `[dedup] Model response shape invalid: expected "clusters" to be an array, got ${typeof parsed.clusters} (${JSON.stringify(parsed.clusters)}).`
+    );
+  }
+
   const clusters = parsed.clusters ?? [];
+
+  clusters.forEach((cluster, index) => {
+    if (cluster === null || typeof cluster !== "object" || Array.isArray(cluster)) {
+      throw new Error(
+        `[dedup] Model response shape invalid: clusters[${index}] must be an object, got ${JSON.stringify(cluster)}.`
+      );
+    }
+    if (!Array.isArray(cluster.source_ids)) {
+      throw new Error(
+        `[dedup] Model response shape invalid: clusters[${index}].source_ids must be an array, got ${typeof cluster.source_ids} (${JSON.stringify(cluster.source_ids)}).`
+      );
+    }
+  });
+
+  // --- Validate: no record assigned to more than one cluster ---
+  // SYSTEM_PROMPT tells the model "a record can appear in at most one
+  // cluster," but nothing enforces that on this side. If the model
+  // violates it, fail loudly here rather than silently letting a
+  // record show up in two different merged_events downstream.
+  const clusterIndicesBySourceId = new Map();
+  clusters.forEach((cluster, index) => {
+    for (const sourceId of cluster.source_ids) {
+      const indices = clusterIndicesBySourceId.get(sourceId) ?? [];
+      indices.push(index);
+      clusterIndicesBySourceId.set(sourceId, indices);
+    }
+  });
+  const multiClustered = [...clusterIndicesBySourceId.entries()].filter(
+    ([, indices]) => indices.length > 1
+  );
+  if (multiClustered.length > 0) {
+    const detail = multiClustered
+      .map(([sourceId, indices]) => `${sourceId} (clusters ${indices.join(", ")})`)
+      .join("; ");
+    throw new Error(
+      `[dedup] Model put the same record in more than one cluster, violating the one-cluster-per-record rule: ${detail}`
+    );
+  }
 
   // --- Validate: no record silently dropped or duplicated ---
   const clusteredIds = new Set(clusters.flatMap((c) => c.source_ids));
@@ -178,6 +195,50 @@ async function dedupRecords(mergedRecords) {
       cluster.source_ids.includes(r.source_id)
     ),
   }));
+
+  // --- Validate: every claimed source_id actually resolved to a record ---
+  // A *partial* hallucination — the model claims N ids in a cluster but
+  // only M < N of them match a real input record — isn't caught by any
+  // check above: shape validation only confirms `source_ids` is an
+  // array, and the one-cluster-per-record check only looks at ids that
+  // ARE present in clusters, so a made-up id that appears nowhere else
+  // just slips through. The `.filter()` right above this then silently
+  // produces a `records` array shorter than `source_ids`, and
+  // synthesize.js builds the `from` audit trail straight off
+  // `cluster.records` — so the one output field this whole pipeline
+  // exists to make trustworthy would quietly under-report which sources
+  // the model actually claimed, with nothing anywhere flagging it. Runs
+  // here (after clustersWithRecords is built, last before return) rather
+  // than earlier because it needs `cluster.records` to already exist to
+  // compare lengths against `source_ids`, and it's deliberately the last
+  // check: it treats a hallucinated id as a distinct failure mode from
+  // shape errors or double-clustering, and only makes sense to check
+  // once those more basic shape issues are already ruled out. Same
+  // aggregate-then-throw-once style as the one-cluster-per-record check
+  // above — collect every unresolved id across every cluster first, then
+  // throw a single error covering all of it, rather than stopping at the
+  // first mismatch.
+  const mergedRecordIds = new Set(mergedRecords.map((r) => r.source_id));
+  const unresolvedByCluster = [];
+  clustersWithRecords.forEach((cluster, index) => {
+    if (cluster.records.length !== cluster.source_ids.length) {
+      const missingIds = cluster.source_ids.filter(
+        (id) => !mergedRecordIds.has(id)
+      );
+      unresolvedByCluster.push({ index, missingIds });
+    }
+  });
+  if (unresolvedByCluster.length > 0) {
+    const detail = unresolvedByCluster
+      .map(
+        ({ index, missingIds }) =>
+          `cluster ${index} claims ${missingIds.join(", ")}`
+      )
+      .join("; ");
+    throw new Error(
+      `[dedup] Model claimed source_id(s) in a cluster that don't match any input record (hallucinated id, not just an unresolved duplicate): ${detail}`
+    );
+  }
 
   return { clusters: clustersWithRecords, standalone };
 }

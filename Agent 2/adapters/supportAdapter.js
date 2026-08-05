@@ -23,14 +23,24 @@ function normalizeSupportRecord(rawRecord) {
     const { caseId, opened, client, notes } = rawRecord;
   
     // --- Malformed check ---
-    // A case is unusable without a stable id and without notes — notes
-    // IS the text content here. `client` being null is expected and
+    // A case is unusable without a stable id, without notes — notes IS
+    // the text content here — or without a date that actually parses (an
+    // unparseable date would otherwise reach `.toISOString()` below and
+    // throw an unhandled RangeError). `client` being null is expected and
     // fine (see SUP-7784), same reasoning as `account`/`customer` in the
     // other two adapters.
-    if (!caseId || !notes) {
+    const malformedReasons = [];
+    if (!caseId) malformedReasons.push("missing caseId");
+    if (!notes) malformedReasons.push("missing notes");
+    if (Number.isNaN(new Date(opened).getTime())) malformedReasons.push("invalid date");
+
+    if (malformedReasons.length > 0) {
+      // Log only the record's own identifier and the reason(s) — never the
+      // raw record body. Support cases carry customer complaint text that
+      // shouldn't be dumped to logs unredacted once this is wired to real
+      // Zendesk/Freshdesk/Intercom data.
       console.warn(
-        `[supportAdapter] Skipping malformed record (missing caseId or notes):`,
-        rawRecord
+        `[supportAdapter] Skipping malformed record (caseId: ${caseId || "unknown"}) - ${malformedReasons.join(", ")}`
       );
       return null;
     }

@@ -22,15 +22,25 @@ function normalizeOpsRecord(rawRecord) {
   const { ticket_id, reported_on, system, customer, description } = rawRecord;
 
   // --- Malformed check ---
-  // For ops, a record is unusable without a stable id and without a
+  // For ops, a record is unusable without a stable id, without a
   // description — description IS the text content here, so a ticket
-  // with no description has nothing to feed into synthesis.
+  // with no description has nothing to feed into synthesis — or without a
+  // date that actually parses (an unparseable date would otherwise reach
+  // `.toISOString()` below and throw an unhandled RangeError).
   // `customer` being missing/null is expected and fine (see OPS-1041,
   // OPS-1044, etc.) — most ops tickets have no customer at all.
-  if (!ticket_id || !description) {
+  const malformedReasons = [];
+  if (!ticket_id) malformedReasons.push("missing ticket_id");
+  if (!description) malformedReasons.push("missing description");
+  if (Number.isNaN(new Date(reported_on).getTime())) malformedReasons.push("invalid date");
+
+  if (malformedReasons.length > 0) {
+    // Log only the record's own identifier and the reason(s) — never the
+    // raw record body. Ops tickets carry customer content that shouldn't
+    // be dumped to logs unredacted once this is wired to real
+    // PagerDuty/Jira/ServiceNow data.
     console.warn(
-      `[opsAdapter] Skipping malformed record (missing ticket_id or description):`,
-      rawRecord
+      `[opsAdapter] Skipping malformed record (ticket_id: ${ticket_id || "unknown"}) - ${malformedReasons.join(", ")}`
     );
     return null;
   }

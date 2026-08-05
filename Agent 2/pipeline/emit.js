@@ -129,11 +129,27 @@ function renderMarkdown(summary) {
 /**
  * Validate and write the summary to disk as both JSON and markdown.
  *
+ * Filenames default to a period-derived slug (e.g.
+ * "summary-2026-07-20_to_2026-07-24"). If a file already exists at that
+ * path — most commonly a repeat run against the same period — a Unix
+ * timestamp is appended to both filenames instead of silently overwriting
+ * the previous run's output (e.g.
+ * "summary-2026-07-20_to_2026-07-24_1785847177.json"). The clean,
+ * unsuffixed name is used whenever it wouldn't collide with an existing
+ * file.
+ *
+ * Alongside that versioned pair, `summary-latest.json` / `summary-latest.md`
+ * are also written every run, unconditionally overwritten — no collision
+ * check, no versioning. They always hold the exact same content as the
+ * versioned pair from the run that just completed, giving a stable
+ * "check one filename for the most recent run" path without disturbing
+ * the versioned audit history above.
+ *
  * @param {object} summary - output of synthesize()
  * @param {object} [options]
  * @param {string} [options.outputDir] - defaults to Agent 2/output
  * @param {string} [options.filenameBase] - defaults to a period-based slug
- * @returns {{ jsonPath: string, markdownPath: string }}
+ * @returns {{ jsonPath: string, markdownPath: string, latestJsonPath: string, latestMarkdownPath: string }}
  */
 function emit(summary, options = {}) {
   validateSummary(summary);
@@ -141,19 +157,43 @@ function emit(summary, options = {}) {
   const outputDir = options.outputDir || path.resolve(__dirname, "..", "output");
   fs.mkdirSync(outputDir, { recursive: true });
 
-  const filenameBase =
+  const baseFilenameBase =
     options.filenameBase || `summary-${summary.period.replace(/\s+/g, "_")}`;
 
-  const jsonPath = path.join(outputDir, `${filenameBase}.json`);
-  const markdownPath = path.join(outputDir, `${filenameBase}.md`);
+  let filenameBase = baseFilenameBase;
+  let jsonPath = path.join(outputDir, `${filenameBase}.json`);
+  let markdownPath = path.join(outputDir, `${filenameBase}.md`);
 
-  fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2), "utf-8");
-  fs.writeFileSync(markdownPath, renderMarkdown(summary), "utf-8");
+  // Don't silently clobber a previous run's output — the merged_events
+  // audit trail only means something if it can't be overwritten out from
+  // under you. Repeat runs against the same period get their own files.
+  if (fs.existsSync(jsonPath) || fs.existsSync(markdownPath)) {
+    filenameBase = `${baseFilenameBase}_${Math.floor(Date.now() / 1000)}`;
+    jsonPath = path.join(outputDir, `${filenameBase}.json`);
+    markdownPath = path.join(outputDir, `${filenameBase}.md`);
+  }
+
+  const jsonContent = JSON.stringify(summary, null, 2);
+  const markdownContent = renderMarkdown(summary);
+
+  fs.writeFileSync(jsonPath, jsonContent, "utf-8");
+  fs.writeFileSync(markdownPath, markdownContent, "utf-8");
+
+  // Always-overwritten convenience copy of the same content — unlike the
+  // pair above, no versioning and no collision check: that's the point,
+  // it's meant to be clobbered every run so there's one stable filename
+  // for "the most recent summary," alongside the versioned history.
+  const latestJsonPath = path.join(outputDir, "summary-latest.json");
+  const latestMarkdownPath = path.join(outputDir, "summary-latest.md");
+  fs.writeFileSync(latestJsonPath, jsonContent, "utf-8");
+  fs.writeFileSync(latestMarkdownPath, markdownContent, "utf-8");
 
   console.log(`[emit] Wrote ${jsonPath}`);
   console.log(`[emit] Wrote ${markdownPath}`);
+  console.log(`[emit] Wrote ${latestJsonPath}`);
+  console.log(`[emit] Wrote ${latestMarkdownPath}`);
 
-  return { jsonPath, markdownPath };
+  return { jsonPath, markdownPath, latestJsonPath, latestMarkdownPath };
 }
 
 module.exports = { emit, validateSummary, renderMarkdown };

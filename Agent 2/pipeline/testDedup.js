@@ -2,13 +2,13 @@
 const { mergeSources } = require("./merge");
 const { dedupRecords } = require("./dedup");
 
-const sales = require("../sales.json");
-const ops = require("../ops.json");
-const support = require("../support.json");
+const sales = require("../fixtures/sales.json");
+const ops = require("../fixtures/ops.json");
+const support = require("../fixtures/support.json");
 
-const merged = mergeSources({ sales, ops, support });
+const { records } = mergeSources({ sales, ops, support });
 
-dedupRecords(merged)
+dedupRecords(records)
   .then((result) => {
     console.log(JSON.stringify(result, null, 2));
   })

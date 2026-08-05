@@ -1,11 +1,14 @@
 // pipeline/merge.js
 //
 // Combines the normalized output of all three adapters into one flat
-// array. Also detects SOURCE-level failures (a whole source with zero
-// records) — distinct from the per-record malformed skips the adapters
-// already handle internally. This is the missing piece behind the
-// `skipped` field in the final output, which used to be hardcoded to
-// an empty array with no actual detection behind it.
+// array. Also detects SOURCE-level failures — distinct from the
+// per-record malformed skips the adapters already handle internally.
+// Two ways a source can fail at that level: "empty" (zero raw records
+// to begin with) or "all_malformed" (had raw records, but every one
+// of them failed its adapter's malformed-record check, leaving zero
+// usable records). This is the missing piece behind the `skipped`
+// field in the final output, which used to be hardcoded to an empty
+// array with no actual detection behind it.
 
 const { normalizeSales } = require("../adapters/salesAdapter");
 const { normalizeOps } = require("../adapters/opsAdapter");
@@ -25,6 +28,7 @@ function isEmptyOps(raw) {
  *   records: common-shape records from all sources, malformed entries
  *     already dropped by the adapters
  *   skipped: source-level failures, e.g. [{ source: "support", reason: "empty" }]
+ *     or [{ source: "support", reason: "all_malformed" }]
  */
 function mergeSources({ sales, ops, support }) {
   const skipped = [];
@@ -33,19 +37,31 @@ function mergeSources({ sales, ops, support }) {
   if (isEmptySalesOrSupport(sales)) {
     skipped.push({ source: "sales", reason: "empty" });
   } else {
-    records.push(...normalizeSales(sales));
+    const normalized = normalizeSales(sales);
+    if (normalized.length === 0) {
+      skipped.push({ source: "sales", reason: "all_malformed" });
+    }
+    records.push(...normalized);
   }
 
   if (isEmptyOps(ops)) {
     skipped.push({ source: "ops", reason: "empty" });
   } else {
-    records.push(...normalizeOps(ops));
+    const normalized = normalizeOps(ops);
+    if (normalized.length === 0) {
+      skipped.push({ source: "ops", reason: "all_malformed" });
+    }
+    records.push(...normalized);
   }
 
   if (isEmptySalesOrSupport(support)) {
     skipped.push({ source: "support", reason: "empty" });
   } else {
-    records.push(...normalizeSupport(support));
+    const normalized = normalizeSupport(support);
+    if (normalized.length === 0) {
+      skipped.push({ source: "support", reason: "all_malformed" });
+    }
+    records.push(...normalized);
   }
 
   return { records, skipped };

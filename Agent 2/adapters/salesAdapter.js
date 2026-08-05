@@ -25,14 +25,24 @@ function normalizeSalesRecord(rawRecord) {
   
     // --- Malformed check ---
     // For sales, a record is only unusable if it's missing the things we
-    // can't fall back on: a stable id, and the actual text content.
+    // can't fall back on: a stable id, the actual text content, or a date
+    // that actually parses (an unparseable date would otherwise reach
+    // `.toISOString()` below and throw an unhandled RangeError).
     // Note: `account` (our entity) being null is NOT malformed — it's a
     // valid record that just has no correlation hint. That's an expected,
     // designed-for case (see SAL-010 in the fixture), not an error.
-    if (!id || !summary) {
+    const malformedReasons = [];
+    if (!id) malformedReasons.push("missing id");
+    if (!summary) malformedReasons.push("missing summary");
+    if (Number.isNaN(new Date(date).getTime())) malformedReasons.push("invalid date");
+
+    if (malformedReasons.length > 0) {
+      // Log only the record's own identifier and the reason(s) — never the
+      // raw record body. Sales records carry account/deal content that
+      // shouldn't be dumped to logs unredacted once this is wired to real
+      // Salesforce data.
       console.warn(
-        `[salesAdapter] Skipping malformed record (missing id or summary):`,
-        rawRecord
+        `[salesAdapter] Skipping malformed record (id: ${id || "unknown"}) - ${malformedReasons.join(", ")}`
       );
       return null;
     }

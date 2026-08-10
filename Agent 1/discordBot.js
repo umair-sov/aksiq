@@ -27,7 +27,7 @@
  * directly, plus exposes ad hoc inbox Q&A and reply drafting.
  */
 import dotenv from 'dotenv';
-dotenv.config({ path: '/Users/umair/Developer/aksiq/.env' });
+dotenv.config({ path: ['.env', '../.env'] });
 import { Client, GatewayIntentBits } from 'discord.js';
 import { exec } from 'child_process';
 import fs from 'fs';
@@ -52,7 +52,7 @@ client.on('interactionCreate', async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
   console.log('Allowed:', process.env.DISCORD_ALLOWED_USER_ID, '| Actual:', interaction.user.id);
-  
+
   if (!ALLOWED_USER_IDS.includes(interaction.user.id)) {
     await interaction.reply({ content: "Sorry, you're not authorized to use this bot.", ephemeral: true });
     return;

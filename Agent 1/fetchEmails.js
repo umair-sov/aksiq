@@ -184,8 +184,8 @@ function findPlainTextPart(payload) {
   // Gmail search query: only unread messages that don't already carry one of
   // our own triage labels. Excluding already-labeled messages prevents
   // re-fetching (and re-triaging) emails from a previous run.
-  const QUERY = 'is:unread -label:Triage/Action-Required -label:Triage/FYI -label:Triage/Newsletter -label:Triage/Meeting -label:Triage/Personal -label:Triage/Unknown';
-  const MAX_EMAILS = 50;
+  const QUERY = '-label:Triage/Action-Required -label:Triage/FYI -label:Triage/Newsletter -label:Triage/Meeting -label:Triage/Personal -label:Triage/Unknown';
+  const MAX_EMAILS = 25;
 
   /**
    * Inputs: auth (Object) — an authorized Google auth client from
@@ -235,7 +235,7 @@ async function fetchEmails() {
     const auth = await getAuthorizedClient();
 
   const messageRefs = await listUnreadMessageRefs(auth);
-  console.log(`Found ${messageRefs.length} unread, untriaged messages. Fetching full content...`);
+  console.log(`Found ${messageRefs.length} recent, untriaged messages. Fetching full content...`);
 
   const emails = [];
 

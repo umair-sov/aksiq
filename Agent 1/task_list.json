@@ -1,78 +1,54 @@
 [
   {
-    "source_email_id": "19f59ef14ec4a8ea",
+    "source_email_id": "19f435af5b2f84f5",
     "category": "action_required",
     "priority": "high",
-    "suggested_task": "Review new Google account sign-in activity and secure account if unauthorized",
+    "suggested_task": "Review Netflix account security and verify new device login from Sindh, Pakistan",
     "event_datetime": null,
     "truncated": false
   },
   {
-    "source_email_id": "19f5994b4e449815",
+    "source_email_id": "19f40bea4a8510c3",
     "category": "action_required",
     "priority": "high",
-    "suggested_task": "Update payment information for Spark Premium subscription to avoid service interruption",
+    "suggested_task": "Add money to SGD account to bring balance above zero within 7 days",
+    "event_datetime": "2026-07-15T23:59:59+05:00",
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f403ed7895eba8",
+    "category": "action_required",
+    "priority": "high",
+    "suggested_task": "Go to HR Room for biometric registration",
     "event_datetime": null,
     "truncated": false
   },
   {
-    "source_email_id": "19f595ca94b13ff6",
+    "source_email_id": "19f403d6c8dfa087",
     "category": "action_required",
     "priority": "high",
-    "suggested_task": "Top up Trust Bank account - transaction declined",
+    "suggested_task": "Go to HR Room (in-front of waiting area) for biometric registration",
     "event_datetime": null,
     "truncated": false
   },
   {
-    "source_email_id": "19f58c9b78132228",
+    "source_email_id": "19f403b3c7a9146d",
     "category": "action_required",
     "priority": "high",
-    "suggested_task": "RSVP for Apple phone screening interview by July 15, 2026",
-    "event_datetime": "2026-07-13T00:00:00+05:00",
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f586a00a1acbb0",
-    "category": "action_required",
-    "priority": "high",
-    "suggested_task": "Update payment method for Hostinger KVM 2 plan to avoid service interruption",
+    "suggested_task": "Reply to Umair with location for biometric setup",
     "event_datetime": null,
     "truncated": false
   },
   {
-    "source_email_id": "19f5446331b17e0f",
+    "source_email_id": "19f40392ac988b67",
     "category": "action_required",
-    "priority": "high",
-    "suggested_task": "Review Google Account security alert for Spark app access authorization",
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f53a49245e465a",
-    "category": "action_required",
-    "priority": "high",
-    "suggested_task": "RSVP for Apple phone screening by July 14, 2026",
-    "event_datetime": "2026-07-14T23:59:59+05:00",
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f50345d528bb91",
-    "category": "action_required",
-    "priority": "high",
-    "suggested_task": "Add money to Revolut SGD account to bring balance above zero",
-    "event_datetime": "2026-07-14T23:59:59+05:00",
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f594856b3f3e2e",
-    "category": "meeting",
     "priority": "medium",
-    "suggested_task": "Check AI Automation Society calendar for tomorrow's event",
-    "event_datetime": "2026-07-14T00:00:00+05:00",
+    "suggested_task": "Go to get biometric done (Maaz confirmed availability)",
+    "event_datetime": null,
     "truncated": false
   },
   {
-    "source_email_id": "19fa7c5adbacf02c",
+    "source_email_id": "19f43bf21a5c073c",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -80,7 +56,23 @@
     "truncated": false
   },
   {
-    "source_email_id": "19fa7c0a4acaf143",
+    "source_email_id": "19f4381f893ecffa",
+    "category": "action_required",
+    "priority": "low",
+    "suggested_task": "Review and respond to LinkedIn connection request from Saarib Khalid",
+    "event_datetime": null,
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f431c70eb1860b",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": "2026-07-11T00:00:00+05:00",
+    "truncated": false
+  },
+  {
+    "source_email_id": "19f42dbd14a29284",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -88,7 +80,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f5b35c1649ab4e",
+    "source_email_id": "19f42ac3f7cc3133",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -96,7 +88,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f5b2da8ca78ddc",
+    "source_email_id": "19f42a64c6f2d3c8",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -104,7 +96,15 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f5aba6730f1cf9",
+    "source_email_id": "19f42a542503b0d0",
+    "category": "newsletter",
+    "priority": "low",
+    "suggested_task": null,
+    "event_datetime": "2026-07-15T08:00:00+05:00",
+    "truncated": true
+  },
+  {
+    "source_email_id": "19f4294456445261",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -112,7 +112,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f5a7f647e40894",
+    "source_email_id": "19f42831a6e03d23",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -120,7 +120,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f59f2cdab26113",
+    "source_email_id": "19f4280526241af1",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -128,7 +128,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f59e7ab4f5d05b",
+    "source_email_id": "19f427576218ea01",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -136,7 +136,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f59d92de61dd13",
+    "source_email_id": "19f423d362987fce",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -144,63 +144,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f59c0a539c7048",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f59b9e8ff4b045",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f59a248087a365",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f59977f503750a",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f5988d6ba97d5d",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f59780dffdaa01",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f585d296e71077",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f58594b33b8cb5",
+    "source_email_id": "19f41fd8d310017c",
     "category": "fyi",
     "priority": "low",
     "suggested_task": null,
@@ -208,15 +152,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f57fd4c0ebcd40",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": "2026-07-20T08:59:00+05:00",
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f577534b6191cd",
+    "source_email_id": "19f41646ade640a9",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -224,7 +160,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f5745fc00afe2f",
+    "source_email_id": "19f4130335c4e6bd",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -232,7 +168,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f570f41d062cd2",
+    "source_email_id": "19f40fec1296526a",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -240,7 +176,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f56cb2f8109fc9",
+    "source_email_id": "19f40f7cf339b0a9",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -248,7 +184,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f568f5cf2048c1",
+    "source_email_id": "19f40d8869ac6688",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,
@@ -256,143 +192,7 @@
     "truncated": false
   },
   {
-    "source_email_id": "19f567134c3e2029",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f566f9678a2b30",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f54f6b76be25c6",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f54ee939d96966",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f54c0dfdd2f22b",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f547c0eec8c7af",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f546262d38f782",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f53d6e616f85cf",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f524ee210683c2",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f52194e58679d1",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f5216830fd1c9d",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f51ee0d976b022",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f51e8c111e38a6",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f51975b3cf4379",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f5083a704e0f9b",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f5072f0211dc21",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f5071348a1dbe7",
-    "category": "newsletter",
-    "priority": "low",
-    "suggested_task": null,
-    "event_datetime": null,
-    "truncated": false
-  },
-  {
-    "source_email_id": "19f4ffb3c4888da6",
+    "source_email_id": "19f40bddc9c826fd",
     "category": "newsletter",
     "priority": "low",
     "suggested_task": null,

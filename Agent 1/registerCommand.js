@@ -18,7 +18,7 @@
  * of `npm run triage`. Run via its own script/command, separately.
  */
 import dotenv from 'dotenv';
-dotenv.config({ path: '/Users/umair/Developer/aksiq/.env' });
+dotenv.config({ path: ['.env', '../.env'] });
 import { REST, Routes, SlashCommandBuilder } from 'discord.js';
 
 // Defines the three slash commands discordBot.js knows how to handle; each

@@ -18,7 +18,7 @@
  * output files, as a dry run before postDigest.js would post to Discord.
  */
 import dotenv from 'dotenv';
-dotenv.config({ path: '/Users/umair/Developer/aksiq/.env' });
+dotenv.config({ path: ['.env', '../.env'] });
 import { buildDigestMessage } from './formatDigest.js';
 
 const message = await buildDigestMessage();

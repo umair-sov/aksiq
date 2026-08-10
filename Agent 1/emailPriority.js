@@ -35,7 +35,7 @@ function loadEmails() {
 
 
 import dotenv from 'dotenv';
-dotenv.config({ path: '/Users/umair/Developer/aksiq/.env'});
+dotenv.config({ path: ['.env', '../.env'] });
 
 import Anthropic from '@anthropic-ai/sdk';
 

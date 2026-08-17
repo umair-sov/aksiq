@@ -5,19 +5,20 @@
  * previewDigest.js. Not run directly and not part of `npm run triage` itself —
  * it's a library module that reads the artifacts triage already produced
  * (task_list.json, emails.json) and formats them into a Discord-ready message,
- * closing with a short Claude-generated summary line.
+ * closing with a short OpenRouter-generated summary line.
  *
  * Depends on:
  * - task_list.json (from emailPriority.js) and emails.json (from
  *   fetchEmails.js) — read-only, no writes.
- * - `@anthropic-ai/sdk` for the closing summary line.
+ * - `llmClient/index.js` (callLLM) for the closing summary line, via
+ *   whichever provider LLM_PROVIDER names.
  *
  * Where it fits in the pipeline: called by postDigest.js (last step of
  * `npm run triage`, posts to Discord) and previewDigest.js (`npm run
  * preview-digest`, prints to the console instead).
  */
 import fs from 'fs';
-import Anthropic from '@anthropic-ai/sdk';
+import { callLLM } from './llmClient/index.js';
 
 /**
  * Inputs: none.
@@ -124,25 +125,33 @@ function buildSections(taskList, emailsById) {
  * `buildSections`, each with `label` and `event_datetime`; highCount (number)
  * — count of high-priority, non-deadline items.
  * Output: Promise<string> — a one-to-two sentence plain-language summary.
- * What it does: asks Claude to write the digest's closing summary line,
- * highlighting the most urgent deadline and whether anything needs attention.
+ * What it does: asks the model (via OpenRouter) to write the digest's closing
+ * summary line, highlighting the most urgent deadline and whether anything
+ * needs attention.
  * How it does it: pre-formats the deadline list into a compact string (or
  * 'none') so the model gets concrete facts to summarize rather than raw JSON.
  */
 async function generateSummaryLine(deadlines, highCount) {
-  const client = new Anthropic();
   const deadlineSummary = deadlines
     .map((d) => `${d.label} (${formatDeadlineDate(d.event_datetime)})`)
     .join(', ') || 'none';
 
   const prompt = `Write ONE short plain-language summary (max 2 sentences) for an email digest, given: ${highCount} high-priority items not tied to a deadline, and these deadlines added to calendar: ${deadlineSummary}. Mention the most urgent deadline if any exist, and whether anything urgent needs attention. Respond with ONLY the summary text.`;
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-5',
-    max_tokens: 150,
-    messages: [{ role: 'user', content: prompt }],
+  // Empty system prompt on purpose: the entire instruction already lives in
+  // `prompt` above, so it stays a single user turn. jsonMode: false is forced
+  // because this function needs prose — the harness defaults to JSON mode.
+  // (That option name is the harness's; openRouterClient.js's equivalent
+  // responseFormat is now set for it inside adapters/openrouter.js.) No
+  // maxTokens: the client's 8000-token default replaces the old 150-token
+  // cap, which was tight enough to risk truncating the summary.
+  const summary = await callLLM('', prompt, {
+    jsonMode: false,
+    logLabel: '[formatDigest]',
   });
-  return response.content[0].text.trim();
+  // trim() stays: this value is concatenated into the digest as
+  // `Summary: ${summary}` and posted straight to Discord.
+  return summary.trim();
 }
 
 /**
@@ -154,7 +163,7 @@ async function generateSummaryLine(deadlines, highCount) {
  * text from task_list.json and emails.json.
  * How it does it: loads and buckets every task via `buildSections`, then
  * appends each non-empty section (deadlines, high, medium, low) as its own
- * block, and finally appends a Claude-generated summary line from
+ * block, and finally appends an OpenRouter-generated summary line from
  * `generateSummaryLine`. Each deadline/high/medium item's confirmation
  * ("Added to Calendar" / "Added to Task") reflects what `buildSections`
  * determined syncToGoogle.js actually did for that item, rather than always

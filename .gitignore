@@ -1,3 +1,5 @@
 node_modules
-.env.DS_Store
+.DS_Store
 .env
+Agent 2/output/
+token.json*

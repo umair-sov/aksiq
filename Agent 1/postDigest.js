@@ -3,9 +3,24 @@
  * -------------
  * Final step in the triage pipeline (fetchEmails.js -> emailPriority.js ->
  * syncToGoogle.js -> applyLabels.js -> postDigest.js). Builds the formatted
- * inbox digest (via formatDigest.js) and posts it to the #gmail-digest
- * Discord channel through a webhook — no persistent bot connection needed,
- * since a webhook is just a one-off HTTP POST.
+ * inbox digest (via formatDigest.js) and posts it to the #gmail Discord
+ * channel through a webhook — no persistent bot connection needed, since a
+ * webhook is just a one-off HTTP POST.
+ *
+ * WHICH CHANNEL THIS POSTS TO IS NOT DECIDED HERE. A Discord webhook is bound
+ * to one channel at creation time, so the destination is baked into
+ * DISCORD_WEBHOOK_URL and nothing in this file names, resolves, or can change
+ * it — retargeting the digest means creating a webhook on the other channel
+ * and swapping the env var, not editing this code. The #gmail above is
+ * therefore a statement about the current .env, verified against Discord's
+ * API on 2026-08-17, rather than something the code enforces. Treat it as
+ * liable to drift and re-check it rather than trusting it.
+ *
+ * That it lands in #gmail matters beyond tidiness: discordBot.js's router
+ * reads recent channel messages as conversational context and deliberately
+ * keeps bot/webhook messages in that history, so posting the digest here is
+ * what lets a follow-up like "what was the second one?" resolve against it.
+ * Moving the digest to its own channel would silently break that.
  *
  * Depends on: formatDigest.js (message content), DISCORD_WEBHOOK_URL (env var).
  *
